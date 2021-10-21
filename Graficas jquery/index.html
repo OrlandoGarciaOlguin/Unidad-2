@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Graficas Jquery</title>
+</head>
+<body>
+    <input type="text" id="nombre" placeholder="Nombre">
+    <input type="text" id="total" placeholder="total">
+    <input type="button" value="Generar" id="btnGenerar">
+    <canvas id="myChart" width="100" height="100"></canvas>
+</body>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@3.5.1/dist/chart.min.js"></script>
+<script>
+    
+    $(document).ready(function(){
+        var ctx = document.getElementById('myChart').getContext('2d');
+        var elementos = [];
+        var valores= [];
+
+        var myChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: [elementos],
+                datasets: [{
+                    label: '# of Votes',
+                    data: [valores],                   
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+        
+        $("#btnGenerar").click(function(){
+            elementos.push($("#nombre").val());
+            valores.push($("#total").val());
+            addData(myChart, elementos, valores);
+        });
+        
+        function addData(chart, label, data) {
+            chart.data.labels.push(label);
+            chart.data.datasets.forEach((dataset) => {
+                dataset.data.push(data);
+            });
+            chart.update();
+        }
+
+
+    });
+</script>
+</html>

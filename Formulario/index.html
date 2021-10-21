@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Graficas Jquery</title>
+</head>
+<body>
+    <center>
+    <form>
+
+        <label for="">Ingresa Nombre</label>
+        <input type="text" id="nombre" name="nombre"><br><br>
+
+        <label for="">Ingresese Apellidos</label>
+        <input type="text" id="apellidos" name="numero"><br><br>
+
+        <label for="">Ingrese Edad</label>
+        <input type="text" id="edad" name="numero"><br><br>
+
+        <label for="">Seleccione Sexo</label>
+        <select id="sexo">
+            <option value="">Seleccione</option>
+            <option value="1">Masculino</option>
+            <option value="0">Femenino</option>
+        </select><br><br>
+
+        <label for="">Seleccione Fotos</label>
+        <input type="file" id="foto" name="foto"><br><br>
+
+        <input type="button" id="verificar" value="Enviar">        
+    </form>
+    </center>
+    <!-- <input type="text" id="nombre" placeholder="Nombre">
+    <input type="text" id="total" placeholder="total">
+    <input type="button" value="Generar" id="btnGenerar"> -->
+    <div class="chart-container" style="position: relative; height:50vh; width:50%">
+        <canvas id="myChart"></canvas>
+    </div>
+    
+</body>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@3.5.1/dist/chart.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.7/dist/sweetalert2.all.min.js"></script>
+<script>
+    
+    $(document).ready(function(){
+        var ctx = document.getElementById('myChart').getContext('2d');
+        var elementos = ["ok","oki"];
+        var valores= ["10","15"];
+        
+        var myChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: elementos,
+                datasets: [{
+                    label: '# of Votes',
+                    data: valores,                   
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        responsive: true,
+                        maintainAspectRatio: false,
+                    }
+                }
+            }
+        });
+
+        $("#btnGenerar").click(function(){
+            elementos.push($("#nombre").val());
+            valores.push($("#total").val());
+            addData(myChart, elementos, valores);
+        });
+
+
+        $("#verificar").click(function(){
+            let nombre = $("#nombre").val();
+            let apellidos = $("#apellidos").val();
+            let edad = $("#edad").val();
+            let sexo = $("#sexo").val();
+
+            if(nombre == ""){
+                $("#nombre").focus();
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Ingresa el nombre!',                    
+                })                
+                return false;
+            }
+
+            if(apellidos == ""){
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Ingresa apellidos!',
+                })
+                $("#apellidos").focus();
+                return
+            }
+
+            if(edad == ""){
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Ingresa edad!',
+                })
+                $("#edad").focus();
+                return
+            }
+
+            if(sexo == ""){
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Ingresa sexo!',
+                })
+                $("#sexo").focus();
+                return
+            }
+
+        });
+
+        
+        function addData(chart, label, data) {
+            chart.data.labels.push(label);
+            chart.data.datasets.forEach((dataset) => {
+                dataset.data.push(data);
+            });
+            chart.update();
+        };
+
+    });
+</script>
+</html>
